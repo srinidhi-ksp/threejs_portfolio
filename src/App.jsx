@@ -1,31 +1,42 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Project from "./pages/Project";
-import Contact from "./pages/Contact";
-import Navbar from "./components/Navbar";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import * as THREE from "three";
+import CityScene from "./scenes/CityScene";
 
 
-function App() {
+export default function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
+    <Canvas
+      shadows
+      camera={{
+        position: [35, 30, 35],
+        fov: 50,
+      }}
 
-        <Route path="/about" element={<About />} />
+      onCreated={({ scene }) => {
+  scene.background = new THREE.Color("#b9e8ff");
+}}
+    >
+      <ambientLight intensity={0.4} />
 
-        <Route path="/projects" element={<Project />} />
+<directionalLight
+  position={[40, 50, 20]}
+  intensity={2}
+  castShadow
+  shadow-mapSize-width={2048}
+  shadow-mapSize-height={2048}
+  shadow-camera-left={-80}
+  shadow-camera-right={80}
+  shadow-camera-top={80}
+  shadow-camera-bottom={-80}
+/>
 
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-    </BrowserRouter>
+      <OrbitControls
+        target={[0, 0, 0]}
+        maxPolarAngle={Math.PI / 2.2}
+      />
+      
+      <CityScene />
+    </Canvas>
   );
 }
-
-export default App;
